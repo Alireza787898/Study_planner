@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وب اپلیکیشن برنامه ریزی مطالعه</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --secondary: #50e3c2;
+            --bg: #f4f7f6;
+            --card-bg: #ffffff;
+            --text: #333;
+            --border: #e0e0e0;
+            --danger: #ff6b6b;
+            --warning: #ffb86c;
+            --info: #4FC3F7;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 15px;
+            line-height: 1.8;
+            padding-bottom: 80px;
+        }
+
+        input, select, button, textarea {
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 10px;
+        }
+        header h1 {
+            color: var(--primary);
+            font-size: 1.8em; 
+            margin-bottom: 5px;
+        }
+        header p {
+            font-size: 1em; 
+            color: #555;
+            margin-top: 0;
+            font-weight: 500;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        h3 {
+            color: var(--primary);
+            margin-top: 0;
+            font-size: 1.2em;
+            font-weight: 700;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus {
+             outline: none;
+             border-color: var(--primary);
+        }
+        
+        .input-error {
+            border: 2px solid var(--danger) !important;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% {transform: translateX(0);}
+            20%, 60% {transform: translateX(-5px);}
+            40%, 80% {transform: translateX(5px);}
+        }
+
+        input.date-input {
+            background-color: #fff;
+            cursor: pointer;
+            caret-color: transparent;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            width: 100%;
+            font-size: 1.1em;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            width: 100%;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+            padding: 0 10px;
+            font-size: 0.9em;
+            height: 42px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .resource-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 8px;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #eee; 
+            transition: border-color 0.3s;
+        }
+        
+        .resource-row.error {
+            border: 2px solid var(--danger);
+        }
+
+        .resource-row input {
+            margin-bottom: 0;
+            font-size: 0.9em;
+            padding: 8px;
+        }
+
+        .month-section {
+            border: 1px solid var(--primary);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            background: #fdfdfd;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 5px;
+            margin-top: 15px;
+        }
+
+        .day-box {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 4px;
+            text-align: center;
+            background: #fff;
+        }
+
+        .day-header {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 3px;
+            font-size: 0.85em;
+        }
+
+        .shift-input-group {
+            display: flex;
+            justify-content: space-between; /* نمایش هر دو ورودی ساعت و شیفت */
+        }
+
+        .shift-input-group input {
+            margin-bottom: 2px;
+            padding: 2px;
+            font-size: 0.85em;
+            text-align: center;
+            height: 28px;
+            flex-grow: 1; /* تقسیم مساوی فضا */
+            width: 48%; /* به جای 100% */
+        }
+        
+        .shift-input-group .day-shift {
+            margin-right: 2px;
+        }
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(2px);
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            width: 85%;
+            max-width: 450px; /* افزایش عرض برای جا شدن عنوان‌ها */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .shift-setting-row {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .shift-setting-row input { margin-bottom: 0; }
+
+        .date-picker-container {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        .date-select-group { flex: 1; text-align: center; }
+        .date-select-group select { padding: 5px; font-size: 0.9em; }
+
+        .hidden { display: none; }
+        
+        .group-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .group-select {
+            flex-grow: 1;
+            padding: 5px;
+            font-size: 0.9em;
+            margin-bottom: 0;
+            width: auto !important; /* Override full width */
+            margin-left: 5px;
+        }
+        .group-select-container {
+            display: flex;
+            flex-grow: 1;
+            gap: 5px;
+            align-items: center;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+        
+        .group-select.error {
+            border: 2px solid var(--danger) !important;
+        }
+        
+        /* --- استایل جدید برای جزئیات روزانه در وب‌سایت --- */
+        #dailyPlanDetails > div {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* سایه جذاب */
+        }
+        
+        #dailyPlanDetails > div strong.date-header {
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             font-size: 1.1em;
+             margin-bottom: 8px;
+        }
+        
+        #dailyPlanDetails > div strong.date-header span {
+             font-size: 0.9em;
+        }
+        
+        #dailyPlanDetails ul {
+            list-style-type: none;
+            padding-right: 0;
+        }
+        
+        #dailyPlanDetails li {
+            padding-right: 0; 
+            position: relative;
+            font-size: 0.95em;
+        }
+        
+        .plan-summary-alert {
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .plan-summary-alert.error {
+            background-color: #ffe6e6;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+        
+        .plan-summary-alert.warning {
+             background-color: #fff9e6;
+             color: var(--warning);
+             border: 1px solid var(--warning);
+        }
+        
+        /* --- استایل جدید برای کادر نام برنامه --- */
+        #planTitleInPDF {
+            text-align: center;
+            font-size: 1.4em; 
+            font-weight: 800;
+            color: var(--primary); 
+            margin-bottom: 25px;
+            padding: 15px 20px; 
+            border: 2px solid var(--primary); 
+            border-radius: 15px; 
+            background-color: #eef7ff; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+            display: none; 
+        }
+        
+        /* --- استایل پنهان‌سازی ساعت‌ها (فقط بخش نتایج) --- */
+        #totalHoursSummary {
+            display: none !important; /* خلاصه ساعت‌ها پنهان بماند */
+        }
+        
+        /* ورودی‌های avg-hour-input و day-hour در بخش 4 باید نمایش داده شوند (نیازی به CSS اضافی برای نمایش نیست) */
+
+        /* --- پایان استایل جدید --- */
+
+        @media (max-width: 600px) {
+            .resource-row {
+                grid-template-columns: 1.5fr 1fr 1fr auto;
+                gap: 5px;
+                padding: 5px;
+            }
+            .resource-row input {
+                font-size: 12px; 
+                padding: 6px 2px;
+                text-align: center;
+            }
+            .resource-row .res-name {
+                text-align: right;
+                padding-right: 5px;
+            }
+            .btn-danger {
+                padding: 0 8px;
+                font-size: 14px;
+            }
+            .group-select-container {
+                 flex-wrap: nowrap;
+            }
+        }
+        
+        /* --- استایل مخصوص چاپ/PDF --- */
+        @media print {
+            /* پنهان کردن تمام المان‌های ورودی و کنترلی */
+            body > .container > .card:not(#resultsSection),
+            .modal, .btn:not(#pdfButton), .hidden {
+                display: none !important;
+            }
+            
+            /* نمایش هدر در خروجی چاپ */
+            header {
+                display: block !important; 
+                text-align: center;
+                margin-bottom: 20px;
+                page-break-after: avoid; 
+            }
+            
+            /* تنظیمات عمومی برای خروجی چاپ */
+            body, .container, .card {
+                background-color: white !important;
+                color: black !important;
+                box-shadow: none !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            /* اطمینان از نمایش نتایج به صورت تمام صفحه */
+            #resultsSection {
+                padding: 10px !important;
+                margin: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+            }
+            
+            #resultsSection h3 {
+                display: none; /* پنهان کردن هدر "۶. برنامه مطالعاتی پیشنهادی" */
+            }
+            
+            /* استایل عنوان برنامه در خروجی PDF */
+            #planTitleInPDF {
+                display: block !important; 
+                font-size: 1.6em !important; 
+                font-weight: 800 !important;
+                color: #000 !important; 
+                text-align: center !important;
+                margin-bottom: 20px !important;
+                padding: 15px 20px !important;
+                border: 2px solid #333 !important; 
+                border-radius: 10px !important;
+                background-color: #f0f0f0 !important; 
+                box-shadow: none !important; 
+            }
+
+            /* استایل جزئیات روزانه در PDF */
+            #dailyPlanDetails > div {
+                 border: 1px solid #444; 
+                 padding: 10px;
+                 border-radius: 5px;
+                 margin-bottom: 10px; 
+                 page-break-inside: avoid;
+                 box-shadow: none !important; 
+                 background: #f7f7f7; 
+            }
+            
+            #dailyPlanDetails ul {
+                padding-right: 20px;
+                list-style-type: disc;
+            }
+            
+            #dailyPlanDetails li {
+                margin-bottom: 3px;
+                line-height: 1.4;
+            }
+            
+            #dailyPlanDetails li::before {
+                content: none;
+            }
+            
+            #totalHoursSummary {
+                display: none !important; /* پنهان‌سازی مجدد در PDF */
+            }
+            
+            .plan-summary-alert {
+                 border: 1px solid black !important;
+                 background-color: #eee !important;
+                 color: black !important;
+                 padding: 5px;
+            }
+        }
+        /* --- پایان استایل مخصوص چاپ/PDF --- */
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <header>
+        <h1>وب اپلیکیشن برنامه ریزی مطالعه</h1>
+        <p>برنامه نویس و توسعه دهنده: علیرضا اکبری</p>
+    </header>
+
+    <div class="card">
+        <h3>۱. مشخصات برنامه</h3>
+        <input type="text" id="planName" placeholder="نام برنامه (مثلاً: ارشد پرستاری)">
+    </div>
+
+    <div class="card">
+        <h3>۲. منابع مطالعاتی</h3>
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr auto; gap:5px; font-size:0.8em; color:gray; margin-bottom:5px; padding:0 5px;">
+            <span>نام درس</span>
+            <span style="text-align:center">صفحات</span>
+            <span style="text-align:center">سرعت(ص/س)</span>
+            <span></span>
+        </div>
+        <div id="resourcesContainer"></div>
+        <button class="btn btn-outline" onclick="addResource()" style="margin-top:10px">+ افزودن منبع</button>
+    </div>
+
+    <div class="card">
+        <h3>۳. بازه زمانی</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+                <label>شروع:</label>
+                <input type="text" id="startDate" class="date-input" placeholder="انتخاب تاریخ" readonly onclick="openDatePicker('start')">
+            </div>
+            <div>
+                <label>پایان:</label>
+                <input type="text" id="endDate" class="date-input" placeholder="انتخاب تاریخ" readonly onclick="openDatePicker('end')">
+            </div>
+        </div>
+        <button class="btn btn-primary" onclick="generateMonths()">تایید و ادامه</button>
+    </div>
+
+    <div class="card hidden" id="calendarSection">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3>۴. تقویم و شیفت‌ها</h3>
+            <button class="btn btn-outline" style="width:auto; font-size: 0.8em; padding:5px 10px;" onclick="openShiftSettings()">⚙️ شیفت‌ها</button>
+        </div>
+        <div id="monthsContainer"></div>
+    </div>
+
+    <div class="card hidden" id="finalStep">
+        <h3>۵. تنظیمات نهایی</h3>
+        
+        <div style="margin-bottom: 20px;">
+             <label>تعداد درس در هر روز:</label>
+             <input type="number" id="subjectsPerDay" min="1" value="2" onchange="updateGroupInputs()">
+             <p id="resourceCountHint" style="font-size: 0.8em; color: gray; margin-top: -10px;"></p>
+        </div>
+        
+        <div style="margin-bottom: 15px;">
+            <label style="font-weight:700;">شیوه چینش دروس روزانه:</label>
+            <div style="display:flex; gap:15px; margin-top:5px;">
+                 <label style="display:inline-flex; align-items:center;">
+                    <input type="radio" name="selectionMode" value="auto" checked onchange="toggleGroupMode('auto')" style="width:auto; margin-left:5px;"> 
+                    خودکار (بر اساس چرخش)
+                </label>
+                <label style="display:inline-flex; align-items:center;">
+                    <input type="radio" name="selectionMode" value="manual" onchange="toggleGroupMode('manual')" style="width:auto; margin-left:5px;"> 
+                    **دستی (ترکیب دلخواه شما)**
+                </label>
+            </div>
+        </div>
+        
+        <div id="manualModeSettings" class="hidden">
+            <label>تعیین گروه‌های درسی (هر گروه یک روز):</label>
+            <p style="font-size: 0.8em; color: gray; margin-top: -10px;">
+               در هر ترکیب، دروس را بدون تکرار انتخاب کنید.
+            </p>
+            <div id="groupsContainer">
+                </div>
+            <button class="btn btn-outline" onclick="addGroupInput()" style="margin-top:10px">+ افزودن ترکیب جدید</button>
+        </div>
+        
+        <hr>
+        <button class="btn btn-primary" onclick="calculatePlan()">محاسبه برنامه</button>
+    </div>
+
+    <div class="card hidden" id="resultsSection">
+        <div id="planTitleInPDF"></div> 
+        
+        <h3>۶. برنامه مطالعاتی پیشنهادی</h3>
+        <div id="alertsContainer"></div>
+        <div id="totalHoursSummary"></div> <div id="planSummary"></div>
+        <hr>
+        <h4>جزئیات روزانه</h4>
+        <div id="dailyPlanDetails"></div>
+        <button class="btn btn-primary" style="margin-top: 20px;" onclick="exportPlanToPDF()">📥 خروجی PDF / چاپ</button>
+    </div>
+</div>
+
+<div id="shiftModal" class="modal">
+    <div class="modal-content">
+        <h3>تنظیمات شیفت‌ها</h3>
+        <div id="shiftSettingsContainer"></div>
+        <button class="btn btn-outline" onclick="addShiftType()">+ جدید</button>
+        <hr>
+        <button class="btn btn-primary" onclick="closeShiftSettings()">تایید</button>
+    </div>
+</div>
+
+<div id="datePickerModal" class="modal">
+    <div class="modal-content">
+        <h3 id="datePickerTitle" style="text-align:center;">انتخاب تاریخ</h3>
+        <div class="date-picker-container">
+            <div class="date-select-group">
+                <label>روز</label>
+                <select id="dp-day"></select>
+            </div>
+            <div class="date-select-group">
+                <label>ماه</label>
+                <select id="dp-month" onchange="updateDaysInMonth()">
+                    <option value="1">فروردین</option>
+                    <option value="2">اردیبهشت</option>
+                    <option value="3">خرداد</option>
+                    <option value="4">تیر</option>
+                    <option value="5">مرداد</option>
+                    <option value="6">شهریور</option>
+                    <option value="7">مهر</option>
+                    <option value="8">آبان</option>
+                    <option value="9">آذر</option>
+                    <option value="10">دی</option>
+                    <option value="11">بهمن</option>
+                    <option value="12">اسفند</option>
+                </select>
+            </div>
+            <div class="date-select-group">
+                <label>سال</label>
+                <select id="dp-year">
+                    <option value="1404">1404</option>
+                    <option value="1405">1405</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn btn-primary" onclick="confirmDate()">تایید</button>
+        <button class="btn btn-danger" style="margin-top:10px; width:100%;" onclick="closeDatePicker()">لغو</button>
+    </div>
+</div>
+
+<script>
+    let shifts = [
+        { name: 'صبح', code: 'D', hours: 3 },
+        { name: 'عصر', code: 'E', hours: 3 },
+        { name: 'شب', code: 'N', hours: 4 },
+        { name: 'لانگ', code: 'DE', hours: 2 },
+        { name: 'عصروشب', code: 'EN', hours: 1 },
+        { name: 'آنکال صبح', code: 'd', hours: 3 },
+        { name: 'آنکال عصر', code: 'e', hours: 3 },
+        { name: 'آنکال شب', code: 'n', hours: 4 },
+        { name: 'مرخصی', code: 'm', hours: 6 },
+        { name: 'استراحت', code: 's', hours: 0 }
+    ];
+
+    let currentDatePickerTarget = null;
+    let studyPeriodData = []; 
+    let resourceNamesList = []; 
+
+    function getResourceNames() {
+        return Array.from(document.querySelectorAll('.resource-row .res-name')).map(input => input.value.trim()).filter(name => name.length > 0);
+    }
+
+    function addResource() {
+        const container = document.getElementById('resourcesContainer');
+        const div = document.createElement('div');
+        div.className = 'resource-row';
+        div.innerHTML = `
+            <input type="text" placeholder="نام درس" class="res-name" oninput="updateGroupInputs()">
+            <input type="number" placeholder="کل" class="res-pages">
+            <input type="number" placeholder="سرعت" class="res-speed">
+            <button class="btn btn-danger" onclick="this.parentElement.remove(); updateGroupInputs()">×</button>
+        `;
+        container.appendChild(div);
+    }
+    addResource();
+
+    function openDatePicker(target) {
+        currentDatePickerTarget = target;
+        document.getElementById('datePickerTitle').innerText = target === 'start' ? 'تاریخ شروع' : 'تاریخ پایان';
+        updateDaysInMonth();
+        document.getElementById('datePickerModal').style.display = 'flex';
+    }
+
+    function closeDatePicker() {
+        document.getElementById('datePickerModal').style.display = 'none';
+    }
+
+    function updateDaysInMonth() {
+        const month = parseInt(document.getElementById('dp-month').value);
+        const daySelect = document.getElementById('dp-day');
+        const currentDay = daySelect.value; 
+        
+        let daysInMonth = (month <= 6) ? 31 : (month === 12 ? 29 : 30); 
+
+        daySelect.innerHTML = '';
+        for (let i = 1; i <= daysInMonth; i++) {
+            const option = document.createElement('option');
+            option.value = i < 10 ? '0' + i : i;
+            option.innerText = i;
+            if (i == currentDay) option.selected = true;
+            daySelect.appendChild(option);
+        }
+    }
+
+    function confirmDate() {
+        const y = document.getElementById('dp-year').value;
+        const m = document.getElementById('dp-month').value;
+        const d = document.getElementById('dp-day').value;
+        const formattedM = m < 10 ? '0' + m : m;
+        const formattedDate = `${y}/${formattedM}/${d}`;
+        
+        if (currentDatePickerTarget === 'start') document.getElementById('startDate').value = formattedDate;
+        else document.getElementById('endDate').value = formattedDate;
+        
+        closeDatePicker();
+    }
+
+    function parseDate(dateStr) {
+        const parts = dateStr.split('/');
+        return { y: parseInt(parts[0]), m: parseInt(parts[1]), d: parseInt(parts[2]) };
+    }
+
+    function isLeap(year) { return false; } 
+
+    function createMonthCard(year, month, startDay, endDay) {
+        const monthNames = ["", "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند"];
+        const monthId = `m-${year}-${month}`;
+        
+        const section = document.createElement('div');
+        section.className = 'month-section';
+        
+        let html = `<h4>${monthNames[month]} ${year}</h4>`;
+        
+        html += `
+            <div style="margin-bottom: 10px; font-size:0.9em;">
+                <label style="display:inline-flex; align-items:center; margin-left:10px;">
+                    <input type="radio" name="mode-${monthId}" value="avg" checked onchange="toggleMode('${monthId}', 'avg')" style="width:auto;"> 
+                    میانگین
+                </label>
+                <label style="display:inline-flex; align-items:center;">
+                    <input type="radio" name="mode-${monthId}" value="manual" onchange="toggleMode('${monthId}', 'manual')" style="width:auto;"> 
+                    دستی (شیفت)
+                </label>
+            </div>
+            
+            <div id="avg-box-${monthId}">
+                <label>ساعت مطالعه روزانه (مبنای محاسبه):</label>
+                <input type="number" class="avg-hour-input" value="4" style="width:100px;">
+            </div>
+
+            <div id="manual-box-${monthId}" class="hidden">
+                <label style="display:flex; align-items:center; margin-bottom:5px; font-size:0.9em;">
+                    <input type="checkbox" id="shift-toggle-${monthId}" onchange="toggleShifts('${monthId}')" style="width:auto; margin-left:5px;">
+                    فعال‌سازی شیفت‌ها
+                </label>
+                <div class="calendar-grid">`;
+
+        for (let d = startDay; d <= endDay; d++) {
+            html += `
+                <div class="day-box">
+                    <div class="day-header">${d}</div>
+                    <div class="shift-input-group">
+                        <input type="number" placeholder="س" class="day-hour" id="h-${monthId}-${d}">
+                        <input type="text" placeholder="ش" class="day-shift" id="s-${monthId}-${d}" disabled 
+                               oninput="applyShiftHour(this, 'h-${monthId}-${d}')">
+                    </div>
+                </div>`;
+        }
+
+        html += `</div></div>`;
+        section.innerHTML = html;
+        document.getElementById('monthsContainer').appendChild(section);
+    }
+    
+    function generateMonths() {
+        const planNameInput = document.getElementById('planName');
+        if (!planNameInput.value.trim()) {
+            alert("لطفاً نام برنامه مطالعاتی را وارد کنید.");
+            planNameInput.classList.add('input-error'); 
+            planNameInput.focus();
+            setTimeout(() => planNameInput.classList.remove('input-error'), 1000); 
+            return;
+        }
+        planNameInput.classList.remove('input-error');
+
+        const resources = getResourceNames();
+        const resourceRows = document.querySelectorAll('.resource-row');
+        if (resources.length === 0) {
+            alert("لطفاً حداقل یک منبع مطالعاتی اضافه کنید.");
+            return;
+        }
+        
+        let isResourceValid = true;
+        for (let i = 0; i < resourceRows.length; i++) {
+            const row = resourceRows[i];
+            const name = row.querySelector('.res-name');
+            const pages = row.querySelector('.res-pages');
+            const speed = row.querySelector('.res-speed');
+
+            row.classList.remove('error');
+            name.classList.remove('input-error');
+            pages.classList.remove('input-error');
+            speed.classList.remove('input-error');
+
+            if (!name.value.trim() || !pages.value.trim() || !speed.value.trim() || parseFloat(pages.value) <= 0 || parseFloat(speed.value) <= 0) {
+                isResourceValid = false;
+                row.classList.add('error'); 
+                if (!name.value.trim()) name.classList.add('input-error');
+                if (!pages.value.trim() || parseFloat(pages.value) <= 0) pages.classList.add('input-error');
+                if (!speed.value.trim() || parseFloat(speed.value) <= 0) speed.classList.add('input-error');
+            }
+        }
+
+        if (!isResourceValid) {
+            alert("لطفاً تمامی فیلدهای منابع (ردیف‌های قرمز) را با مقادیر صحیح و مثبت پر کنید.");
+            return;
+        }
+
+        const startStr = document.getElementById('startDate').value;
+        const endStr = document.getElementById('endDate').value;
+        if (!startStr || !endStr) { 
+            alert("لطفا تاریخ شروع و پایان را انتخاب کنید"); 
+            return; 
+        }
+
+        const start = parseDate(startStr);
+        const end = parseDate(endStr);
+        
+        if (start.y > end.y || (start.y === end.y && start.m > end.m) || (start.y === end.y && start.m === end.m && start.d > end.d)) {
+            alert("تاریخ پایان باید بعد از تاریخ شروع باشد!");
+            return;
+        }
+        
+        const container = document.getElementById('monthsContainer');
+        container.innerHTML = '';
+        
+        studyPeriodData = [];
+        let dayCounter = 0;
+
+        let currentY = start.y;
+        let currentM = start.m;
+        
+        while (currentY < end.y || (currentY === end.y && currentM <= end.m)) {
+            const startDay = (currentY === start.y && currentM === start.m) ? start.d : 1;
+            let maxDays = (currentM <= 6) ? 31 : (currentM === 12 && !isLeap(currentY) ? 29 : 30);
+            const endDay = (currentY === end.y && currentM === end.m) ? end.d : maxDays;
+            
+            if(startDay <= endDay) { 
+                 createMonthCard(currentY, currentM, startDay, endDay);
+            }
+            
+            for (let d = startDay; d <= endDay; d++) {
+                 dayCounter++;
+                 studyPeriodData.push({
+                    id: `d-${dayCounter}`,
+                    date: `${currentY}/${currentM < 10 ? '0' + currentM : currentM}/${d < 10 ? '0' + d : d}`,
+                    monthId: `m-${currentY}-${currentM}`,
+                    day: d,
+                    Smday: 0, 
+                    Sday_Req: 0, 
+                    assignments: [],
+                    totalUsedHours: 0
+                 });
+            }
+
+            currentM++;
+            if (currentM > 12) {
+                currentM = 1;
+                currentY++;
+            }
+        }
+
+        document.getElementById('calendarSection').classList.remove('hidden');
+        document.getElementById('finalStep').classList.remove('hidden');
+        document.getElementById('resultsSection').classList.add('hidden'); 
+        
+        const resourceCount = resources.length;
+        const hintEl = document.getElementById('resourceCountHint');
+        const inputEl = document.getElementById('subjectsPerDay');
+        
+        inputEl.max = resourceCount;
+        inputEl.value = Math.min(2, resourceCount); 
+        hintEl.innerText = `(حداکثر: ${resourceCount} درس)`;
+        
+        resourceNamesList = resources;
+        updateGroupInputs();
+    }
+
+    function toggleMode(monthId, mode) {
+        const avgBox = document.getElementById(`avg-box-${monthId}`);
+        const manualBox = document.getElementById(`manual-box-${monthId}`);
+        if (mode === 'avg') {
+            avgBox.classList.remove('hidden');
+            manualBox.classList.add('hidden');
+        } else {
+            avgBox.classList.add('hidden');
+            manualBox.classList.remove('hidden');
+        }
+    }
+    
+    function toggleGroupMode(mode) {
+        document.getElementById('manualModeSettings').classList.toggle('hidden', mode !== 'manual');
+    }
+    
+    function updateGroupInputs() {
+        const container = document.getElementById('groupsContainer');
+        const subPerDay = parseInt(document.getElementById('subjectsPerDay').value) || 1;
+        
+        const currentResources = getResourceNames();
+        resourceNamesList = currentResources; 
+
+        const groupRows = container.querySelectorAll('.group-row');
+        groupRows.forEach((row, rowIndex) => {
+            const selectContainer = row.querySelector('.group-select-container');
+            const currentSelectedValues = Array.from(selectContainer.querySelectorAll('.group-select')).map(s => s.value);
+            
+            selectContainer.innerHTML = '';
+            
+            for (let i = 0; i < subPerDay; i++) {
+                const select = createSubjectSelect(i, rowIndex, currentResources);
+                
+                if (currentSelectedValues[i] && currentResources.includes(currentSelectedValues[i])) {
+                    select.value = currentSelectedValues[i];
+                }
+                
+                selectContainer.appendChild(select);
+            }
+        });
+        
+        if (groupRows.length === 0 && document.querySelector('input[name="selectionMode"]:checked').value === 'manual') {
+            addGroupInput();
+        }
+        
+        groupRows.forEach((row, rowIndex) => {
+            const selects = row.querySelectorAll('.group-select');
+            selects.forEach(select => {
+                select.onchange = () => updateSelectOptions(rowIndex);
+            });
+        });
+        
+        groupRows.forEach((row, rowIndex) => updateSelectOptions(rowIndex));
+    }
+    
+    function createSubjectSelect(inputIndex, groupIndex, resources) {
+        const select = document.createElement('select');
+        select.className = 'group-select';
+        select.setAttribute('data-group-index', groupIndex);
+        select.setAttribute('data-input-index', inputIndex);
+        select.onchange = () => updateSelectOptions(groupIndex);
+
+        let options = '<option value="">--- انتخاب درس ---</option>';
+        resources.forEach(name => {
+            options += `<option value="${name}">${name}</option>`;
+        });
+        select.innerHTML = options;
+        return select;
+    }
+
+    function addGroupInput() {
+        const container = document.getElementById('groupsContainer');
+        const subPerDay = parseInt(document.getElementById('subjectsPerDay').value) || 1;
+        const groupCount = container.querySelectorAll('.group-row').length;
+        const resources = getResourceNames();
+
+        const div = document.createElement('div');
+        div.className = 'group-row';
+        
+        let selectContainerHtml = '<div class="group-select-container">';
+        for (let i = 0; i < subPerDay; i++) {
+            selectContainerHtml += `<select class="group-select" data-group-index="${groupCount}" data-input-index="${i}"></select>`;
+        }
+        selectContainerHtml += '</div>';
+
+        div.innerHTML = `
+            ${selectContainerHtml}
+            <button class="btn btn-danger" onclick="this.parentElement.remove(); updateSelectOptions(-1)">×</button>
+        `;
+        container.appendChild(div);
+        
+        updateGroupInputs(); 
+    }
+    
+    function updateSelectOptions(currentGroupIndex) {
+        const allGroups = document.querySelectorAll('#groupsContainer .group-row');
+        
+        allGroups.forEach((row, groupIndex) => {
+            const selects = row.querySelectorAll('.group-select');
+            const currentSelections = Array.from(selects).map(s => s.value).filter(v => v !== "");
+            
+            selects.forEach(select => {
+                const currentValue = select.value;
+                const otherSelections = currentSelections.filter(v => v !== currentValue);
+                
+                select.innerHTML = '';
+                
+                const placeholderOption = document.createElement('option');
+                placeholderOption.value = "";
+                placeholderOption.innerText = "--- انتخاب درس ---";
+                select.appendChild(placeholderOption);
+
+                resourceNamesList.forEach(name => {
+                    const option = document.createElement('option');
+                    option.value = name;
+                    option.innerText = name;
+                    
+                    if (otherSelections.includes(name)) {
+                        option.disabled = true;
+                    }
+                    
+                    select.appendChild(option);
+                });
+                
+                if (resourceNamesList.includes(currentValue) && !otherSelections.includes(currentValue)) {
+                    select.value = currentValue;
+                } else {
+                    select.value = "";
+                }
+                
+                if (select.value === "" && resourceNamesList.length > 0) {
+                    select.classList.add('input-error');
+                } else {
+                    select.classList.remove('input-error');
+                }
+            });
+        });
+    }
+
+    function toggleShifts(monthId) {
+        const isChecked = document.getElementById(`shift-toggle-${monthId}`).checked;
+        const shiftInputs = document.querySelectorAll(`#manual-box-${monthId} .day-shift`);
+        shiftInputs.forEach(input => {
+            input.disabled = !isChecked;
+            if (!isChecked) input.value = '';
+        });
+    }
+
+    function applyShiftHour(input, hourId) {
+        const shift = shifts.find(s => s.code.toLowerCase() === input.value.toLowerCase());
+        const hourInput = document.getElementById(hourId);
+        if (shift) {
+            hourInput.value = shift.hours;
+        } else {
+            hourInput.value = '';
+        }
+    }
+
+    function openShiftSettings() {
+        const container = document.getElementById('shiftSettingsContainer');
+        container.innerHTML = '';
+        
+        // اضافه کردن عنوان‌ها
+        container.innerHTML = `
+            <div style="display: flex; gap: 5px; margin-bottom: 10px; font-weight: 600; font-size: 0.9em;">
+                <span style="flex:2">نام شیفت</span>
+                <span style="flex:1; text-align:center">علامت اختصاری</span>
+                <span style="flex:1; text-align:center">ساعت آزاد</span>
+                <span style="width: 42px;"></span>
+            </div>
+        `;
+
+        shifts.forEach((s, index) => {
+            const div = document.createElement('div');
+            div.className = 'shift-setting-row';
+            div.innerHTML = `
+                <input type="text" value="${s.name}" onchange="updateShift(${index}, 'name', this.value)" style="flex:2">
+                <input type="text" value="${s.code}" onchange="updateShift(${index}, 'code', this.value)" style="flex:1; text-align:center">
+                <input type="number" value="${s.hours}" onchange="updateShift(${index}, 'hours', this.value)" style="flex:1; text-align:center">
+                <button class="btn btn-danger" onclick="removeShift(${index})" style="width:auto; padding:0 8px;">×</button>
+            `;
+            container.appendChild(div);
+        });
+        document.getElementById('shiftModal').style.display = 'flex';
+    }
+
+    function closeShiftSettings() {
+        document.getElementById('shiftModal').style.display = 'none';
+    }
+
+    function updateShift(i, k, v) { shifts[i][k] = (k === 'hours' ? Number(v) : v); }
+    function removeShift(i) { shifts.splice(i, 1); openShiftSettings(); }
+    function addShiftType() { shifts.push({ name: 'جدید', code: 'X', hours: 0 }); openShiftSettings(); }
+
+    // =======================================================
+    //           الگوریتم اصلی (تناسبی خالص + چرخش + گروه‌بندی)
+    // =======================================================
+
+    let resourceCycleIndex = 0;
+    let groupCycleIndex = 0;
+    let originalResources = [];
+    let studyGroups = []; 
+
+    function getValidGroupsFromUI() {
+        const groupRows = document.querySelectorAll('#groupsContainer .group-row');
+        let validGroups = [];
+        let isValid = true;
+        const resourcesInPlan = getResourceNames();
+
+        if (groupRows.length === 0 && document.querySelector('input[name="selectionMode"]:checked').value === 'manual') {
+             alert("در حالت گروه‌بندی دستی، حداقل یک ترکیب درسی تعریف کنید.");
+             return null;
+        }
+
+        groupRows.forEach(row => {
+            const selects = row.querySelectorAll('.group-select');
+            let group = [];
+            let rowIsValid = true;
+            
+            selects.forEach(select => {
+                if (select.value === "" || !resourcesInPlan.includes(select.value)) {
+                    rowIsValid = false;
+                } else {
+                    group.push(select.value);
+                }
+            });
+            
+            if (!rowIsValid) {
+                isValid = false;
+            } else {
+                if (new Set(group).size !== group.length) { 
+                    isValid = false; 
+                }
+                validGroups.push(group);
+            }
+        });
+
+        if (!isValid) {
+            alert("خطا در تعریف گروه‌های درسی: مطمئن شوید تمامی کادرهای انتخاب شده‌اند و تکراری نباشند. (فیلدهای قرمز را اصلاح کنید)");
+            return null;
+        }
+        
+        const allAssignedResources = new Set();
+        validGroups.forEach(group => group.forEach(name => allAssignedResources.add(name)));
+        
+        const unassignedResources = resourcesInPlan.filter(name => !allAssignedResources.has(name));
+        
+        if (unassignedResources.length > 0) {
+             console.warn(`هشدار: دروس زیر در هیچ ترکیبی استفاده نشده‌اند: ${unassignedResources.join(', ')}`);
+        }
+        
+        return validGroups;
+    }
+    
+    function calculatePlan() {
+        resourceCycleIndex = 0;
+        groupCycleIndex = 0;
+
+        const resCount = document.querySelectorAll('.resource-row').length;
+        const selectionMode = document.querySelector('input[name="selectionMode"]:checked').value;
+        
+        // --- ۱. جمع‌آوری و محاسبه پارامترهای پایه (Pt, Zs, Sn) ---
+        originalResources = Array.from(document.querySelectorAll('.resource-row')).map((row, index) => {
+            const pages = parseFloat(row.querySelector('.res-pages').value); 
+            const speed = parseFloat(row.querySelector('.res-speed').value); 
+
+            const Zs = 1 / speed; // ضریب سختی (زمان لازم برای هر صفحه)
+            const Sn = pages / speed; // ساعت مورد نیاز کل برای این درس
+
+            return {
+                name: row.querySelector('.res-name').value.trim(),
+                Pt: pages,
+                speed: speed,
+                Zs: Zs, 
+                Sn: Sn, 
+                pagesRemaining: pages, 
+                originalIndex: index
+            };
+        });
+        
+        const St2_Initial = originalResources.reduce((sum, res) => sum + res.Sn, 0); 
+        
+        let subPerDay = 0;
+        studyGroups = [];
+
+        subPerDay = parseInt(document.getElementById('subjectsPerDay').value);
+        if (resCount === 0 || subPerDay > resCount || !subPerDay || subPerDay < 1) { 
+            alert("خطا در تعداد درس در روز. لطفاً تعداد درس در روز را بررسی کنید."); 
+            return; 
+        }
+
+        if (selectionMode === 'manual') { 
+            const groups = getValidGroupsFromUI();
+            if (!groups) return;
+            studyGroups = groups;
+        }
+
+        // --- ۲. محاسبه ساعات مطالعه در دسترس ورودی (Smday) ---
+        let St1_Initial = 0; 
+        studyPeriodData.forEach(day => {
+            const avgMode = document.querySelector(`input[name="mode-${day.monthId}"]:checked`).value === 'avg';
+            let Smday = 0; 
+
+            if (avgMode) {
+                Smday = parseFloat(document.querySelector(`#avg-box-${day.monthId} .avg-hour-input`).value) || 0;
+            } else {
+                const hourInput = document.getElementById(`h-${day.monthId}-${day.day}`);
+                Smday = parseFloat(hourInput.value) || 0;
+            }
+            
+            day.Smday = Smday; 
+            day.assignments = [];
+            day.totalUsedHours = 0; 
+            St1_Initial += Smday;
+        });
+        
+        if (St1_Initial <= 0) { 
+            alert("خطا: مجموع ساعات مطالعه شما صفر محاسبه شده است. لطفاً تنظیمات شیفت یا میانگین ساعت مطالعه را بررسی کنید.");
+            return;
+        }
+        
+        // عامل فشار کلی
+        const F = St2_Initial / St1_Initial;
+        let hasImpossibleDay = false;
+        let totalAssignedHours = 0; 
+
+        // --- ۳. محاسبه و تخصیص روزانه ---
+        studyPeriodData.forEach(day => {
+            if (day.Smday > 0) {
+                const dailyReqHoursCalculated = day.Smday * F;
+                
+                let targetHours = Math.ceil(dailyReqHoursCalculated);
+                
+                if (targetHours > 24) {
+                    hasImpossibleDay = true;
+                    targetHours = 24; 
+                }
+                
+                let availableTimeForDay = targetHours; 
+                
+                let remainingResources = originalResources.filter(r => r.pagesRemaining > 0.001);
+                
+                if (remainingResources.length > 0) {
+                    let selectedSubjects = [];
+                    
+                    // --- الف: انتخاب دروس (خودکار یا دستی) ---
+                    if (selectionMode === 'auto') {
+                        const toSelectCount = Math.min(subPerDay, remainingResources.length);
+                        
+                        const cycleResources = [];
+                        let tempIndex = resourceCycleIndex;
+                        while(cycleResources.length < toSelectCount) {
+                            let nextSubject = remainingResources[tempIndex % remainingResources.length];
+                            if (!cycleResources.includes(nextSubject)) {
+                                cycleResources.push(nextSubject);
+                            }
+                            tempIndex++;
+                        }
+                        
+                        selectedSubjects = cycleResources;
+                        resourceCycleIndex += selectedSubjects.length; 
+                        
+                    } else { 
+                        let availableGroups = studyGroups.filter(groupNames => {
+                            return groupNames.every(name => {
+                                const res = remainingResources.find(r => r.name === name);
+                                return res && res.pagesRemaining > 0.001;
+                            });
+                        });
+                        
+                        if (availableGroups.length > 0) {
+                            let targetGroup = availableGroups[groupCycleIndex % availableGroups.length];
+                            groupCycleIndex++;
+                            
+                            targetGroup.forEach(name => {
+                                const res = remainingResources.find(r => r.name === name);
+                                if (res) selectedSubjects.push(res);
+                            });
+                        } else {
+                            const toSelectCount = Math.min(subPerDay, remainingResources.length);
+                             for (let i = 0; i < toSelectCount; i++) {
+                                let nextSubject = remainingResources[resourceCycleIndex % remainingResources.length];
+                                if (!selectedSubjects.find(s => s.name === nextSubject.name)) {
+                                    selectedSubjects.push(nextSubject);
+                                }
+                                resourceCycleIndex++;
+                            }
+                        }
+                    }
+
+                    // --- ب: تقسیم زمان و محاسبه صفحات (با استفاده از ساعت گردشده) ---
+                    let totalDifficulty = selectedSubjects.reduce((sum, r) => sum + r.Zs, 0);
+                    let dailyTotalUsed = 0; 
+                    let currentAssignments = [];
+
+                    selectedSubjects.forEach(res => {
+                        if (res.pagesRemaining > 0.001 && totalDifficulty > 0) {
+                            let share = res.Zs / totalDifficulty;
+                            let timeAllocated = availableTimeForDay * share; 
+                            
+                            let rawPages = timeAllocated * res.speed;
+                            
+                            let pagesToRead = Math.ceil(rawPages); 
+                            
+                            if (pagesToRead > res.pagesRemaining) {
+                                pagesToRead = Math.ceil(res.pagesRemaining);
+                            }
+
+                            if (pagesToRead > 0) {
+                                let timeUsed = pagesToRead / res.speed;
+                                dailyTotalUsed += timeUsed;
+                                
+                                currentAssignments.push({
+                                    name: res.name,
+                                    pages: pagesToRead,
+                                    hours: timeUsed, 
+                                    resourceSpeed: res.speed,
+                                    resourceOriginalIndex: res.originalIndex 
+                                });
+                                
+                                res.pagesRemaining -= pagesToRead;
+                            }
+                        }
+                    });
+                    
+                    day.assignments = currentAssignments; 
+                    let currentTotalHours = day.assignments.reduce((sum, a) => sum + a.hours, 0);
+                    
+                    
+                    // --- ج: اعمال سیاست تعدیل ساعت مورد نیاز (رفع باگ ساعت کاذب) ---
+                    const requiredHoursDifference = targetHours - currentTotalHours; 
+                    
+                    if (requiredHoursDifference > 0.2) { 
+                         
+                        let bestCandidate = null;
+                        let maxZs = -1;
+                        
+                         day.assignments.forEach(assignment => {
+                            const resOriginal = originalResources[assignment.resourceOriginalIndex];
+                            if (resOriginal.Zs > maxZs) {
+                                maxZs = resOriginal.Zs;
+                                bestCandidate = assignment;
+                            }
+                         });
+                        
+                        if (bestCandidate) {
+                             const resOriginal = originalResources[bestCandidate.resourceOriginalIndex];
+                            
+                            if (resOriginal.pagesRemaining < 5 && currentTotalHours < 5) {
+                                day.totalUsedHours = parseFloat(currentTotalHours.toFixed(1)); 
+                            } else {
+                                day.totalUsedHours = targetHours;
+                            }
+
+                        } else {
+                            day.totalUsedHours = parseFloat(currentTotalHours.toFixed(1)) || 0;
+                        }
+
+                    } else {
+                        day.totalUsedHours = parseFloat(currentTotalHours.toFixed(1));
+                    }
+                    
+                    day.assignments.forEach(assignment => {
+                        assignment.hours = parseFloat(assignment.hours.toFixed(1));
+                    });
+                    
+                    if (day.totalUsedHours < 0.2 && day.assignments.length > 0) {
+                        day.totalUsedHours = parseFloat(currentTotalHours.toFixed(1)) || 0.2;
+                    }
+
+
+                }
+            }
+            
+            totalAssignedHours += day.totalUsedHours;
+        });
+
+        // --- ۴. نمایش نتایج (با حفظ پنهان‌سازی اطلاعات ساعت در خروجی) ---
+        displayResults(originalResources, St2_Initial, St1_Initial, hasImpossibleDay, totalAssignedHours);
+    }
+    
+    function displayResults(resources, requiredHours, initialAvailableHours, hasImpossibleDay, totalAssignedHours) {
+        document.getElementById('resultsSection').classList.remove('hidden');
+        document.getElementById('alertsContainer').innerHTML = ''; 
+
+        // --- اعمال کادربندی برای نام برنامه ---
+        const planName = document.getElementById('planName').value.trim();
+        document.getElementById('planTitleInPDF').style.display = 'block';
+        document.getElementById('planTitleInPDF').innerHTML = `برنامه مطالعاتی: **${planName}**`;
+        
+        let completionStatus = true;
+        let completionCheckHtml = '';
+
+        resources.forEach(res => {
+            const finalRem = Math.max(0, res.pagesRemaining);
+            if (finalRem > 1) {
+                completionStatus = false;
+                completionCheckHtml += `<p style="margin:2px 0;">${res.name}: ${Math.ceil(finalRem)} صفحه باقی‌مانده.</p>`;
+            }
+        });
+
+        // --- مدیریت هشدارها (بر اساس محاسبات پنهان) ---
+        if (!completionStatus) {
+            document.getElementById('alertsContainer').innerHTML += `
+                <div class="plan-summary-alert error">
+                    🛑 **زمان ناکافی:** برنامه نتوانست **۱۰۰٪ دروس** را به پایان برساند. برای اتمام کامل، یا تاریخ پایان را تمدید کنید یا سرعت مطالعه را افزایش دهید.
+                    ${completionCheckHtml}
+                </div>
+            `;
+        } else if (totalAssignedHours > initialAvailableHours * 1.05) { 
+            document.getElementById('alertsContainer').innerHTML += `
+                <div class="plan-summary-alert warning">
+                    ⚠️ **اخطار فشار زمان:** برای اتمام **۱۰۰٪ دروس**، برنامه مجبور شده است که ساعت مطالعه روزانه شما را افزایش دهد (بر اساس ورودی‌های قابل مشاهده).
+                </div>
+            `;
+        } else if (hasImpossibleDay) {
+             document.getElementById('alertsContainer').innerHTML += `
+                <div class="plan-summary-alert warning">
+                    ⚠️ **هشدار سنگینی برنامه:** در برخی روزها حجم کار بیش از حد سنگین است.
+                </div>
+            `;
+        }
+        
+        // --- خلاصه ساعات کل: این بخش با CSS پنهان است (#totalHoursSummary) ---
+        document.getElementById('totalHoursSummary').innerHTML = ''; 
+
+        let planSummaryHtml = '<h4>وضعیت نهایی دروس:</h4>';
+        
+        resources.forEach(res => {
+            const finalRem = Math.max(0, res.pagesRemaining);
+            const pagesDone = res.Pt - finalRem;
+            const percentage = (pagesDone / res.Pt) * 100;
+            
+            let status;
+            if (finalRem <= 0.01) {
+                 status = '<span style="color:green; font-weight:700;">✅ تکمیل شد</span>';
+            } else {
+                 status = `<span style="color:red; font-weight:700;">${Math.ceil(finalRem)} صفحه باقی‌مانده</span>`;
+            }
+            
+            planSummaryHtml += `
+                <p style="margin:5px 0; font-size:0.9em;">
+                    <strong>${res.name}:</strong> ${pagesDone.toFixed(0)} از ${res.Pt} (${percentage.toFixed(1)}%) - ${status}
+                </p>
+            `;
+        });
+        document.getElementById('planSummary').innerHTML = planSummaryHtml;
+
+        let dailyHtml = '';
+        studyPeriodData.forEach(day => {
+            // در بخش نتایج، ساعت ورودی (Smday) و ساعت استفاده شده (totalUsedHours) نمایش داده نمی شود.
+            if (day.assignments.length > 0 || day.Smday > 0) { 
+                
+                dailyHtml += `
+                    <div>
+                        <strong class="date-header">
+                           🗓️ تاریخ ${day.date}
+                        </strong>
+                        <ul style="margin-top:5px; margin-bottom:5px;">
+                `;
+                
+                if (day.assignments.length === 0 && day.totalUsedHours > 0.2) {
+                    dailyHtml += `<li style="color:gray;">این روز فاقد تخصیص صفحه است. (به دلیل اتمام منابع یا زمان خالی)</li>`;
+                }
+
+                day.assignments.forEach(assignment => {
+                    // --- نمایش فقط صفحات ---
+                    dailyHtml += `
+                        <li>
+                            **${assignment.name}**: ${assignment.pages} صفحه
+                        </li>
+                    `;
+                });
+                dailyHtml += `</ul></div>`;
+            }
+        });
+
+        document.getElementById('dailyPlanDetails').innerHTML = dailyHtml || '<p style="color:gray;">برنامه‌ای تخصیص نیافت.</p>';
+        
+        document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    function exportPlanToPDF() {
+        window.print();
+    }
+</script>
+
+</body>
+</html>
